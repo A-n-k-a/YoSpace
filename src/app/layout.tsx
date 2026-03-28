@@ -138,6 +138,10 @@ export default async function RootLayout({
         : 'zh-CN';
   return (
     <html lang={htmlLang}>
+      <head>
+        <link rel="alternate" type="application/rss+xml" href="/feeds/rss.xml" title="RSS订阅" />
+        <link rel="alternate" type="application/atom+xml" href="/feeds/atom.xml" title="ATOM订阅" />
+      </head>
       <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

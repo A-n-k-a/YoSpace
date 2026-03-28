@@ -5,7 +5,8 @@
         "State": "State",
         "Links": "Links",
         "Tags": "Tags",
-        "Categories": "Categories"
+        "Categories": "Categories",
+        "Subscribe": "订阅"
     },
     "Profile": {
         "ClickToSwitch": "试试点击我！"
@@ -127,5 +128,20 @@
         "Placeholder": "搜索标题或描述...",
         "NoResult": "没有找到匹配的文章",
         "InputLabel": "搜索"
+    },
+    "Subscribe": {
+        "Title": "订阅更新",
+        "Description": "通过RSS或Atom订阅获取最新内容更新",
+        "RSS": "RSS订阅",
+        "Atom": "Atom订阅",
+        "CopyURL": "复制链接",
+        "CopySuccess": "链接已复制到剪贴板",
+        "OpenInApp": "在应用中打开",
+        "Instructions": {
+            "Title": "如何使用",
+            "RSS": "将RSS链接添加到您的RSS阅读器",
+            "Atom": "将Atom链接添加到支持的阅读器",
+            "Browser": "某些浏览器支持直接订阅"
+        }
     }
 }

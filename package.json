@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run generate-feeds",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "generate-feeds": "tsx scripts/generate-feeds.js"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -41,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
     "jsdom": "^29.0.1",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vite": "^8.0.1",
     "vitest": "^4.1.0"

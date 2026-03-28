@@ -5,7 +5,8 @@
         "State": "State",
         "Links": "Links",
         "Tags": "Tags",
-        "Categories": "Categories"
+        "Categories": "Categories",
+        "Subscribe": "Subscribe"
     },
     "Profile": {
         "ClickToSwitch": "Try click it!"
@@ -81,5 +82,20 @@
         "Placeholder": "Search by title or description...",
         "NoResult": "No matching posts found",
         "InputLabel": "Search"
+    },
+    "Subscribe": {
+        "Title": "Subscribe to Updates",
+        "Description": "Get the latest content updates via RSS or Atom feeds",
+        "RSS": "RSS Feed",
+        "Atom": "Atom Feed",
+        "CopyURL": "Copy Link",
+        "CopySuccess": "Link copied to clipboard",
+        "OpenInApp": "Open in App",
+        "Instructions": {
+            "Title": "How to Use",
+            "RSS": "Add RSS link to your RSS reader",
+            "Atom": "Add Atom link to supported readers",
+            "Browser": "Some browsers support direct subscription"
+        }
     }
 }

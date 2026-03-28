@@ -4,11 +4,11 @@ import React, { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AiFillSun, AiFillMoon, AiFillHome } from "react-icons/ai";
-import { FaLink, FaBook, FaBars, FaTags, FaFolderOpen, FaArchive } from "react-icons/fa";
+import { FaLink, FaBook, FaBars, FaTags, FaFolderOpen, FaArchive, FaRss } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { MdTranslate } from "react-icons/md";
 import { profile } from "../../../profile";
-import style from './Header.module.css';
+import style from "./Header.module.css";
 import { useI18n } from "@/context/I18nContext";
 
 type Theme = 'light' | 'dark';
@@ -163,7 +163,6 @@ const Header: React.FC = () => {
           <Link className={style.nav_logo} href="/">{navTitle}</Link>
         </div>
 
-        {/* 桌面端导航 */}
         <div className={style.nav_itemsList}>
           <Link className={`${style.nav_item} ${currentPath === '/' ? style.active : ''}`} href='/'>
             <AiFillHome /> {t('Pages.Home')}
@@ -194,6 +193,9 @@ const Header: React.FC = () => {
           <Link className={`${style.nav_item} ${currentPath === '/links' ? style.active : ''}`} href='/links'>
             <FaLink /> {t('Pages.Links')}
           </Link>
+          <Link className={`${style.nav_item} ${currentPath === '/subscribe' ? style.active : ''}`} href='/subscribe'>
+            <FaRss /> {t('Pages.Subscribe')}
+          </Link>
           {isI18nEnabled && (
             <button 
               className={`${style.nav_item} ${style.nav_toggle}`}  
@@ -215,7 +217,6 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* 移动端汉堡菜单按钮 */}
         <button 
             className={style.hamburger} 
             onClick={toggleMenu}
@@ -224,7 +225,6 @@ const Header: React.FC = () => {
             {isMenuOpen ? <FiX /> : <FaBars />}
         </button>
 
-        {/* 移动端菜单面板 */}
         <div 
             className={`${style.mobile_menu} ${isMenuOpen ? style.mobile_menu_open : ''}`}
             onClick={closeMenu}
@@ -286,6 +286,13 @@ const Header: React.FC = () => {
                   onClick={closeMenu}
                 >
                   <FaLink /> {t('Pages.Links')}
+                </Link>
+                <Link 
+                  className={`${style.mobile_nav_item} ${currentPath === '/subscribe' ? style.active : ''}`} 
+                  href='/subscribe'
+                  onClick={closeMenu}
+                >
+                  <FaRss /> {t('Pages.Subscribe')}
                 </Link>
                 
                 <div className={style.mobile_controls}>
