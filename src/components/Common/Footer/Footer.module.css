@@ -9,6 +9,8 @@
     color: white;
     padding: 10px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .footer_container {
@@ -30,6 +32,7 @@
     gap: 0.5rem;
     text-align: center;
     line-height: 1.5;
+    animation: fadeInUp 0.3s ease-in-out;
 }
 
 .miit_item {
@@ -60,6 +63,7 @@
     gap: 0.25rem;
     text-align: center;
     line-height: 1.4;
+    animation: fadeInUp 0.3s ease-in-out;
 }
 
 .footer_lyric_line {
@@ -109,4 +113,38 @@
     position: static;
     bottom: auto;
     left: auto;
+}
+
+/* 动画关键帧定义 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+/* 歌词模式下的高度调整 */
+.footer_wrapper.lyric_mode {
+    height: 60px;
+    padding: 15px 0;
+}
+
+.footer_wrapper.normal_mode {
+    height: auto;
+    padding: 10px 0;
 }

@@ -143,13 +143,15 @@ a {
         transparent 55%
     ), var(--color-bg);
     opacity: 0;
+    transform: scale(0.98);
     pointer-events: none;
-    transition: opacity 0.22s ease;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     z-index: 90;
 }
 
 .app_transition_visible {
     opacity: 1;
+    transform: scale(1);
     pointer-events: auto;
 }
 
