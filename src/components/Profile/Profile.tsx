@@ -48,7 +48,15 @@ const Profile = () => {
                         使用 img 标签以保持原样式兼容性。
                         如果使用 Next.js Image 组件，需要注意 CSS 适配。
                     */}
-                    <Image src={profileImage} className={style.profile_image} alt="Profile Avatar" width={256} height={256} priority />
+                    <Image
+                        src={profileImage}
+                        className={style.profile_image}
+                        alt="Profile Avatar"
+                        width={256}
+                        height={256}
+                        priority
+                        unoptimized
+                    />
                 </div>
                 <div className={style.profile_content_wrapper}>
                     <div className={`${style.profile_info_wrapper} ${isLoaded ? style.profile_info_wrapper_animated : ""}`}>
@@ -80,6 +88,7 @@ const Profile = () => {
                                         width={20}
                                         height={20}
                                         style={{ objectFit: 'contain' }} 
+                                        unoptimized
                                     />
                                 ) : (
                                     item.iconPackage && item.iconName ? (

@@ -27,7 +27,7 @@ nav.scrolled {
 
 .nav_wrapper {
     display: flex;
-    max-width: 1200px;
+    max-width: 1500px;
     width: 100%;
     justify-content: space-between;
     margin: auto;
@@ -231,7 +231,7 @@ nav.scrolled {
 }
 
 /* Responsive Breakpoints */
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
     .nav_wrapper {
         width: 100%;
         max-width: none;
