@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import blogStyle from "../Blog/Blog.module.css";
 import style from "./Subscribe.module.css";
 import Background from "../Common/Background/Background";
@@ -16,19 +16,10 @@ const Subscribe: React.FC = () => {
   const { t } = useI18n();
   const [copyStatus, setCopyStatus] = useState<{ [key: string]: boolean }>({});
 
-  const baseUrl = useMemo(() => {
-    if (process.env.NEXT_PUBLIC_SITE_URL) {
-      return process.env.NEXT_PUBLIC_SITE_URL;
-    }
-    if (typeof window !== "undefined") {
-      return window.location.origin;
-    }
-    return "";
-  }, []);
-
+  const envBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yospace.waveyo.cn";
   const feedUrls = {
-    rss: `${baseUrl}/feeds/rss.xml`,
-    atom: `${baseUrl}/feeds/atom.xml`,
+    rss: envBaseUrl ? `${envBaseUrl}/feeds/rss.xml` : "/feeds/rss.xml",
+    atom: envBaseUrl ? `${envBaseUrl}/feeds/atom.xml` : "/feeds/atom.xml",
   };
 
   /**
