@@ -19,6 +19,7 @@
 
 # production
 /build
+/public/feeds
 
 # misc
 .DS_Store

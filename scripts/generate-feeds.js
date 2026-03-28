@@ -3,6 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
+const RSS_FEED_PATH = process.env.NEXT_PUBLIC_RSS_FEED_PATH || '/feeds/rss.xml';
+const ATOM_FEED_PATH = process.env.NEXT_PUBLIC_ATOM_FEED_PATH || '/feeds/atom.xml';
+const BLOG_BASE_PATH = process.env.NEXT_PUBLIC_BLOG_BASE_PATH || '/blog';
+
 // 直接复制需要的函数到脚本中（避免模块导入问题）
 function escapeXML(str) {
   return str
@@ -13,12 +17,17 @@ function escapeXML(str) {
     .replace(/'/g, '&apos;');
 }
 
-function generateRSS(posts, baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yospace.waveyo.cn') {
-  const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || 'WaveYo';
-  const siteDescription = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || '从群众出发，扎根群众。向前，无限进步';
+function generateRSS(posts, baseUrl) {
+  const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || 'YoSpace';
+  const siteDescription = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || '';
+  const rssLanguage = process.env.NEXT_PUBLIC_RSS_LANGUAGE || 'zh-CN';
+
+  const normalizedBase = (baseUrl || '').replace(/\/+$/, '');
+  const blogBase = BLOG_BASE_PATH.endsWith('/') ? BLOG_BASE_PATH.slice(0, -1) : BLOG_BASE_PATH;
   
   const items = posts.map(post => {
-    const postUrl = `${baseUrl}/blog/${post.slug}`;
+    const postPath = `${blogBase}/${post.slug}`;
+    const postUrl = normalizedBase ? `${normalizedBase}${postPath}` : postPath;
     const pubDate = new Date(post.publishedTime).toUTCString();
     
     return `
@@ -35,22 +44,25 @@ function generateRSS(posts, baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https
 <rss version="2.0">
   <channel>
     <title>${escapeXML(siteTitle)}</title>
-    <link>${baseUrl}</link>
+    <link>${normalizedBase || '/'}</link>
     <description>${escapeXML(siteDescription)}</description>
-    <language>zh-CN</language>
+    <language>${rssLanguage}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${items}
   </channel>
 </rss>`;
 }
 
-function generateATOM(posts, baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yospace.waveyo.cn') {
+function generateATOM(posts, baseUrl) {
   const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || 'WaveYo';
-  const siteUrl = baseUrl;
+  const normalizedBase = (baseUrl || '').replace(/\/+$/, '');
+  const siteUrl = normalizedBase || '/';
   const updated = new Date().toISOString();
+  const blogBase = BLOG_BASE_PATH.endsWith('/') ? BLOG_BASE_PATH.slice(0, -1) : BLOG_BASE_PATH;
   
   const entries = posts.map(post => {
-    const postUrl = `${baseUrl}/blog/${post.slug}`;
+    const postPath = `${blogBase}/${post.slug}`;
+    const postUrl = normalizedBase ? `${normalizedBase}${postPath}` : postPath;
     const published = new Date(post.publishedTime).toISOString();
     const updated = new Date(post.publishedTime).toISOString();
     
@@ -68,11 +80,14 @@ function generateATOM(posts, baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http
     </entry>`;
   }).join('');
 
+  const selfPath = ATOM_FEED_PATH;
+  const selfHref = normalizedBase ? `${normalizedBase}${selfPath}` : selfPath;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>${escapeXML(siteTitle)}</title>
   <link href="${siteUrl}" rel="alternate"/>
-  <link href="${baseUrl}/feeds/atom.xml" rel="self"/>
+  <link href="${selfHref}" rel="self"/>
   <id>${siteUrl}</id>
   <updated>${updated}</updated>
   <author>
@@ -155,12 +170,6 @@ async function generateFeeds() {
     console.log('开始生成订阅文件...');
     
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yospace.waveyo.cn';
-    const feedsDir = path.join(process.cwd(), 'public', 'feeds');
-    
-    // 确保 feeds 目录存在
-    if (!fs.existsSync(feedsDir)) {
-      fs.mkdirSync(feedsDir, { recursive: true });
-    }
     
     // 获取所有语言的博客文章（数量限制可调整）
     const zhPosts = await getLocalPostsList(0, 50, 'zh-CN');
@@ -173,12 +182,22 @@ async function generateFeeds() {
     
     // 生成 RSS 订阅文件
     const rssContent = generateRSS(allPosts, baseUrl);
-    fs.writeFileSync(path.join(feedsDir, 'rss.xml'), rssContent);
+    const rssOutputPath = path.join(process.cwd(), 'public', RSS_FEED_PATH.replace(/^\//, ''));
+    const rssOutputDir = path.dirname(rssOutputPath);
+    if (!fs.existsSync(rssOutputDir)) {
+      fs.mkdirSync(rssOutputDir, { recursive: true });
+    }
+    fs.writeFileSync(rssOutputPath, rssContent);
     console.log('RSS 生成成功');
     
     // 生成 ATOM 订阅文件
     const atomContent = generateATOM(allPosts, baseUrl);
-    fs.writeFileSync(path.join(feedsDir, 'atom.xml'), atomContent);
+    const atomOutputPath = path.join(process.cwd(), 'public', ATOM_FEED_PATH.replace(/^\//, ''));
+    const atomOutputDir = path.dirname(atomOutputPath);
+    if (!fs.existsSync(atomOutputDir)) {
+      fs.mkdirSync(atomOutputDir, { recursive: true });
+    }
+    fs.writeFileSync(atomOutputPath, atomContent);
     console.log('ATOM 生成成功');
     
     console.log('订阅文件生成完成！');

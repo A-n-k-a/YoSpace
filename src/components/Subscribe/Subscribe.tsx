@@ -17,9 +17,13 @@ const Subscribe: React.FC = () => {
   const [copyStatus, setCopyStatus] = useState<{ [key: string]: boolean }>({});
 
   const envBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yospace.waveyo.cn";
+  const rssFeedPath = process.env.NEXT_PUBLIC_RSS_FEED_PATH || "/feeds/rss.xml";
+  const atomFeedPath = process.env.NEXT_PUBLIC_ATOM_FEED_PATH || "/feeds/atom.xml";
+
+  const normalizedBase = envBaseUrl.replace(/\/+$/, "");
   const feedUrls = {
-    rss: envBaseUrl ? `${envBaseUrl}/feeds/rss.xml` : "/feeds/rss.xml",
-    atom: envBaseUrl ? `${envBaseUrl}/feeds/atom.xml` : "/feeds/atom.xml",
+    rss: normalizedBase ? `${normalizedBase}${rssFeedPath}` : rssFeedPath,
+    atom: normalizedBase ? `${normalizedBase}${atomFeedPath}` : atomFeedPath,
   };
 
   /**

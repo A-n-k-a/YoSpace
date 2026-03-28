@@ -136,11 +136,14 @@ export default async function RootLayout({
       : acceptLang.startsWith('en')
         ? 'en-US'
         : 'zh-CN';
+  const rssFeedPath = process.env.NEXT_PUBLIC_RSS_FEED_PATH || "/feeds/rss.xml";
+  const atomFeedPath = process.env.NEXT_PUBLIC_ATOM_FEED_PATH || "/feeds/atom.xml";
+
   return (
     <html lang={htmlLang}>
       <head>
-        <link rel="alternate" type="application/rss+xml" href="/feeds/rss.xml" title="RSS订阅" />
-        <link rel="alternate" type="application/atom+xml" href="/feeds/atom.xml" title="ATOM订阅" />
+        <link rel="alternate" type="application/rss+xml" href={rssFeedPath} title="RSS订阅" />
+        <link rel="alternate" type="application/atom+xml" href={atomFeedPath} title="ATOM订阅" />
       </head>
       <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
