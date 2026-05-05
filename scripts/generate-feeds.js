@@ -3,6 +3,16 @@
 const fs = require('fs');
 const path = require('path');
 
+// 加载 .env 文件中的环境变量
+const dotenv = require('dotenv');
+const envPath = path.resolve(process.cwd(), '.env');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+  console.log('已加载 .env 文件中的环境变量');
+} else {
+  console.log('.env 文件不存在，使用系统环境变量');
+}
+
 const RSS_FEED_PATH = process.env.NEXT_PUBLIC_RSS_FEED_PATH || '/feeds/rss.xml';
 const ATOM_FEED_PATH = process.env.NEXT_PUBLIC_ATOM_FEED_PATH || '/feeds/atom.xml';
 const BLOG_BASE_PATH = process.env.NEXT_PUBLIC_BLOG_BASE_PATH || '/blog';
