@@ -718,6 +718,32 @@
     border-radius: 8px;
 }
 
+.post_content div[align="center"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.post_content div[align="center"] a {
+    flex: 0 1 auto;
+    min-width: 0;
+    line-height: 0;
+}
+
+.post_content .md_badge_img {
+    display: block;
+    width: auto;
+    height: 24px;
+    max-width: min(160px, 31vw);
+    margin: 0;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
 .md_inline_indent {
     display: inline-block;
     margin-left: 1.5rem;

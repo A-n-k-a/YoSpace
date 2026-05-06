@@ -14,6 +14,9 @@ import {
     hasVercelButtonChild,
     transformMarkdownUrl,
     isOptimizableMarkdownImageSrc,
+    shouldProxyMarkdownImageSrc,
+    toProxiedMarkdownImageSrc,
+    isMarkdownBadgeImageSrc,
 } from './markdownUtils';
 
 interface MarkdownTabsProps {
@@ -405,18 +408,37 @@ export const BlogPostMarkdown: React.FC<BlogPostMarkdownProps> = ({ content, loc
         img({ src, alt, width, height, title, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }) {
             const rawSrc = typeof src === 'string' ? src : '';
             const nextSrc = transformMarkdownUrl(rawSrc);
+            const isBadgeImage = isMarkdownBadgeImageSrc(nextSrc);
             const nextClassName = [
                 props.className,
                 nextSrc && isVercelButtonSrc(nextSrc) ? style.vercel_button_img : undefined,
+                isBadgeImage ? style.md_badge_img : undefined,
             ].filter(Boolean).join(' ');
-            const resolvedWidth = Number(width) || 700;
-            const resolvedHeight = Number(height) || 400;
+            const resolvedWidth = Number(width) || (isBadgeImage ? 160 : 700);
+            const resolvedHeight = Number(height) || (isBadgeImage ? 28 : 400);
 
             if (!nextSrc) {
                 return null;
             }
 
             const imageAlt = alt || '';
+            const proxiedSrc = shouldProxyMarkdownImageSrc(nextSrc) ? toProxiedMarkdownImageSrc(nextSrc) : '';
+
+            if (proxiedSrc) {
+                return (
+                    <Image
+                        src={proxiedSrc}
+                        alt={imageAlt}
+                        className={nextClassName || undefined}
+                        width={resolvedWidth}
+                        height={resolvedHeight}
+                        loading="lazy"
+                        title={title}
+                        unoptimized
+                    />
+                );
+            }
+
             const imageProps = {
                 src: nextSrc,
                 className: nextClassName || undefined,

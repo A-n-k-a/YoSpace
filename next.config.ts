@@ -1,5 +1,16 @@
 import type { NextConfig } from "next";
 
+const parseImageHostnames = (value: string | undefined) => {
+  return Array.from(
+    new Set(
+      (value || 'cloud.waveyo.cn,i.scdn.co,*.music.126.net,vercel.com,skillicons.dev,img.shields.io')
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+    )
+  );
+};
+
 const parseAllowedOrigins = (value: string | undefined) => {
   return (value || '')
     .split(',')
@@ -14,9 +25,19 @@ const serverActionsAllowedOrigins = Array.from(
   ].filter(Boolean) as string[])
 );
 
+const imageHostnames = parseImageHostnames(process.env.IMAGE_HOSTNAMES);
+const musicApiBase = (process.env.NEXT_PUBLIC_MUSIC_API_BASE || 'https://netmusic.waveyo.cn/').replace(/\/$/, '');
+
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  images: {
+    remotePatterns: imageHostnames.map((hostname) => ({
+      protocol: 'https',
+      hostname,
+      pathname: '/**',
+    })),
+  },
   experimental: {
     serverActions: {
       allowedOrigins: serverActionsAllowedOrigins.length > 0 ? serverActionsAllowedOrigins : undefined,
@@ -27,7 +48,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/music-proxy/:path*',
-        destination: 'https://netmusic.waveyo.cn/:path*',
+        destination: `${musicApiBase}/:path*`,
       },
     ];
   },

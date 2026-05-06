@@ -189,6 +189,33 @@ export const transformMarkdownUrl = (url: string) => {
     }
 };
 
+const proxiedMarkdownImageHostnames = new Set([
+    'skillicons.dev',
+    'img.shields.io',
+]);
+
+export const shouldProxyMarkdownImageSrc = (src: string) => {
+    try {
+        const parsed = new URL(src);
+        return parsed.protocol === 'https:' && proxiedMarkdownImageHostnames.has(parsed.hostname.toLowerCase());
+    } catch {
+        return false;
+    }
+};
+
+export const toProxiedMarkdownImageSrc = (src: string) => {
+    return `/api/image-proxy?url=${encodeURIComponent(src)}`;
+};
+
+export const isMarkdownBadgeImageSrc = (src: string) => {
+    try {
+        const parsed = new URL(src);
+        return parsed.protocol === 'https:' && parsed.hostname.toLowerCase() === 'img.shields.io';
+    } catch {
+        return false;
+    }
+};
+
 export const isOptimizableMarkdownImageSrc = (src: string) => {
     const value = src.trim().toLowerCase();
     if (!value) return false;
