@@ -94,6 +94,7 @@
     --color-article-link: var(--color-light-article-link);
 
     --color-progress-track: rgba(0, 0, 0, 0.1);
+    --color-overlay: rgba(255, 255, 255, 0.5);
 }
 
 /* 暗色模式变量映射 */
@@ -116,6 +117,7 @@
     --color-article-link: var(--color-dark-article-link);
 
     --color-progress-track: rgba(255, 255, 255, 0.2);
+    --color-overlay: rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -127,6 +129,35 @@ body {
     padding: 0;
     overflow-x: hidden;
     scrollbar-gutter: stable;
+    isolation: isolate;
+}
+
+/* 背景图片层 - 在装饰文字之上、遮罩之下 */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: var(--bg-image-light);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: -2;
+    pointer-events: none;
+}
+
+body[data-theme='dark']::before {
+    background-image: var(--bg-image-dark);
+}
+
+/* 遮罩层 - 始终显示，浅色用白色，暗色用黑色 */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--color-overlay);
+    pointer-events: none;
+    z-index: -1;
+    transition: background 0.3s ease;
 }
 
 :root,

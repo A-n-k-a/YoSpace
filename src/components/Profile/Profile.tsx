@@ -41,69 +41,71 @@ const Profile = () => {
     const profileImage = rawProfileImage.replace(/(?<!:)\/\//g, '/');
 
     return (
-        <div className={style.profile_wrapper}>
-            <div className={style.profile_container}>
-                <div className={style.profile_image_wrapper}>
-                    {/* 
-                        使用 img 标签以保持原样式兼容性。
-                        如果使用 Next.js Image 组件，需要注意 CSS 适配。
-                    */}
-                    <Image
-                        src={profileImage}
-                        className={style.profile_image}
-                        alt="Profile Avatar"
-                        width={256}
-                        height={256}
-                        priority
-                        unoptimized
-                    />
-                </div>
-                <div className={style.profile_content_wrapper}>
-                    <div className={`${style.profile_info_wrapper} ${isLoaded ? style.profile_info_wrapper_animated : ""}`}>
-                        <h1 
-                            className={style.profile_info_name} 
-                            ref={profileName} 
-                            onClick={handleNameClick} 
-                            title={t('Profile.ClickToSwitch')}
-                        >
-                            {profileNames[nameClicked]}
-                        </h1>
-                        <p className={style.profile_info_signature}>{description}</p>
+        <>
+            <div className={style.profile_wrapper}>
+                <div className={style.profile_container}>
+                    <div className={style.profile_image_wrapper}>
+                        {/* 
+                            使用 img 标签以保持原样式兼容性。
+                            如果使用 Next.js Image 组件，需要注意 CSS 适配。
+                        */}
+                        <Image
+                            src={profileImage}
+                            className={style.profile_image}
+                            alt="Profile Avatar"
+                            width={256}
+                            height={256}
+                            priority
+                            unoptimized
+                        />
                     </div>
-                    <div className={style.profile_social_wrapper}>
-                        {profile.socialLinks.map((item, index) => (
-                            <a
-                                key={index}
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`${style.profile_social_item} ${isLoaded ? style.profile_social_item_animated : ""}`}
-                                style={isLoaded ? { animationDelay: `${0.6 + index * 0.08}s` } : undefined}
-                                aria-label={item.name}
+                    <div className={style.profile_content_wrapper}>
+                        <div className={`${style.profile_info_wrapper} ${isLoaded ? style.profile_info_wrapper_animated : ""}`}>
+                            <h1 
+                                className={style.profile_info_name} 
+                                ref={profileName} 
+                                onClick={handleNameClick} 
+                                title={t('Profile.ClickToSwitch')}
                             >
-                                {item.iconUrl ? (
-                                    <Image 
-                                        src={item.iconUrl} 
-                                        alt={item.name} 
-                                        width={20}
-                                        height={20}
-                                        style={{ objectFit: 'contain' }} 
-                                        unoptimized
-                                    />
-                                ) : (
-                                    item.iconPackage && item.iconName ? (
-                                        <DynamicIcon packageName={item.iconPackage} iconName={item.iconName} />
+                                {profileNames[nameClicked]}
+                            </h1>
+                            <p className={style.profile_info_signature}>{description}</p>
+                        </div>
+                        <div className={style.profile_social_wrapper}>
+                            {profile.socialLinks.map((item, index) => (
+                                <a
+                                    key={index}
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`${style.profile_social_item} ${isLoaded ? style.profile_social_item_animated : ""}`}
+                                    style={isLoaded ? { animationDelay: `${0.6 + index * 0.08}s` } : undefined}
+                                    aria-label={item.name}
+                                >
+                                    {item.iconUrl ? (
+                                        <Image 
+                                            src={item.iconUrl} 
+                                            alt={item.name} 
+                                            width={20}
+                                            height={20}
+                                            style={{ objectFit: 'contain' }} 
+                                            unoptimized
+                                        />
                                     ) : (
-                                        item.name
-                                    )
-                                )}
-                            </a>
-                        ))}
+                                        item.iconPackage && item.iconName ? (
+                                            <DynamicIcon packageName={item.iconPackage} iconName={item.iconName} />
+                                        ) : (
+                                            item.name
+                                        )
+                                    )}
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
             <p className={style.profile_background}>{`<PROFILE/>`}</p>
-        </div>
+        </>
     )
 }
 
