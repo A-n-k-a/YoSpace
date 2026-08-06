@@ -138,6 +138,14 @@ export default async function RootLayout({
         : 'zh-CN';
   const rssFeedPath = process.env.NEXT_PUBLIC_RSS_FEED_PATH || "/feeds/rss.xml";
   const atomFeedPath = process.env.NEXT_PUBLIC_ATOM_FEED_PATH || "/feeds/atom.xml";
+  const bgLight = process.env.NEXT_PUBLIC_BG_IMAGE_LIGHT || '';
+  const bgDark = process.env.NEXT_PUBLIC_BG_IMAGE_DARK || '';
+  const bgStyle = `
+    :root {
+      --bg-image-light: url('${bgLight}');
+      --bg-image-dark: url('${bgDark}');
+    }
+  `;
 
   return (
     <html lang={htmlLang}>
@@ -146,6 +154,7 @@ export default async function RootLayout({
         <link rel="alternate" type="application/atom+xml" href={atomFeedPath} title="ATOM订阅" />
       </head>
       <body suppressHydrationWarning>
+        <style dangerouslySetInnerHTML={{ __html: bgStyle }} />
         <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <I18nProvider>
