@@ -134,14 +134,15 @@ The repo keeps Contentful-related variables, but the current blog implementation
 ### Music Player
 
 - `NEXT_PUBLIC_MUSIC_API_BASE`: music API base URL
+- `NEXT_PUBLIC_MUSIC_USE_PROXY`: whether to use the in-app proxy path for the music API (to avoid CORS issues). Set to `true` or `1` to enable; set to `false` or `0` to disable; if unset, it auto-enables when using the official API (`https://netmusic.waveyo.cn/`)
 - `NEXT_PUBLIC_MUSIC_PLAYLIST_ID`: playlist ID
 
-By default, [next.config.ts](./next.config.ts) contains a rewrite proxy for the music API:
+The project contains a rewrite proxy for the music API in [next.config.ts](./next.config.ts):
 
 - Local path: `/api/music-proxy/*`
-- Proxied to: `https://netmusic.waveyo.cn/*`
+- Proxied to: the address specified by `NEXT_PUBLIC_MUSIC_API_BASE`
 
-If `NEXT_PUBLIC_MUSIC_API_BASE` is set to `https://netmusic.waveyo.cn/`, the player will prefer the in-app proxy path to reduce CORS issues.
+When `NEXT_PUBLIC_MUSIC_USE_PROXY` is enabled, the player will use the in-app proxy path to reduce CORS issues. The proxy target is determined by `NEXT_PUBLIC_MUSIC_API_BASE` and is not limited to the official API.
 
 > The API provided by `netmusic.waveyo.cn` is free to use, but it costs resources to operate and maintain. If you use this API, consider supporting it at [dq.waveyo.cn](https://dq.waveyo.cn) and note that the donation is for the Music API.
 
