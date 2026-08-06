@@ -1,31 +1,31 @@
 [
   {
     "name": "github",
-    "url": "https://github.com/WavesMan",
+    "url": "https://github.com/A-n-k-a",
     "iconPackage": "fa6",
     "iconName": "FaGithub"
   },
   {
     "name": "bilibili",
-    "url": "https://space.bilibili.com/204818057",
+    "url": "https://space.bilibili.com/399207656",
     "iconPackage": "fa6",
     "iconName": "FaBilibili"
   },
   {
-    "name": "X",
-    "url": "https://x.com/Waves__Man",
+    "name": "𝕏",
+    "url": "https://x.com/Businiaoanka",
     "iconPackage": "bs",
     "iconName": "BsTwitterX"
   },
   {
     "name": "BlueSky",
-    "url": "https://bsky.app/profile/waveyo.cn",
+    "url": "https://bsky.app/profile/businiaoanka.bsky.social",
     "iconPackage": "fa6",
     "iconName": "FaBluesky"
   },
   {
     "name": "email",
-    "url": "mailto:waveyo@waveyo.cn",
+    "url": "mailto:businiaoanka@anka1.top",
     "iconPackage": "md",
     "iconName": "MdEmail"
   }
