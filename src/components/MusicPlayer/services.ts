@@ -4,10 +4,13 @@ const PLAYLIST_ID = process.env.NEXT_PUBLIC_MUSIC_PLAYLIST_ID || '12752948320';
 const ENV_BASE = process.env.NEXT_PUBLIC_MUSIC_API_BASE || 'https://netmusic.waveyo.cn/';
 const CLEAN_ENV_BASE = ENV_BASE.replace(/\/$/, '');
 
-// 当使用官方托管的 netmusic.waveyo.cn 时，优先通过站内代理路径，避免浏览器直接跨域请求导致 Failed to fetch
-const BASE_URL = CLEAN_ENV_BASE === 'https://netmusic.waveyo.cn'
-  ? '/api/music-proxy'
-  : CLEAN_ENV_BASE;
+// 通过站内代理路径请求音乐 API，避免浏览器直接跨域请求导致 Failed to fetch
+// 设置 NEXT_PUBLIC_MUSIC_USE_PROXY=true 显式启用代理；未设置时，若使用官方 API 则自动启用
+const MUSIC_USE_PROXY_ENV = process.env.NEXT_PUBLIC_MUSIC_USE_PROXY;
+const USE_PROXY = MUSIC_USE_PROXY_ENV !== undefined
+  ? (MUSIC_USE_PROXY_ENV === 'true' || MUSIC_USE_PROXY_ENV === '1')
+  : CLEAN_ENV_BASE === 'https://netmusic.waveyo.cn';
+const BASE_URL = USE_PROXY ? '/api/music-proxy' : CLEAN_ENV_BASE;
 const FALLBACK_BASE_URL = CLEAN_ENV_BASE;
 
 const normalizeHttps = (url: string | null | undefined) => {
