@@ -15,9 +15,6 @@ import {
     isVercelButtonSrc,
     hasVercelButtonChild,
     transformMarkdownUrl,
-    isOptimizableMarkdownImageSrc,
-    shouldProxyMarkdownImageSrc,
-    toProxiedMarkdownImageSrc,
     isMarkdownBadgeImageSrc,
 } from './markdownUtils';
 
@@ -424,34 +421,16 @@ export const BlogPostMarkdown: React.FC<BlogPostMarkdownProps> = ({ content, loc
             }
 
             const imageAlt = alt || '';
-            const proxiedSrc = shouldProxyMarkdownImageSrc(nextSrc) ? toProxiedMarkdownImageSrc(nextSrc) : '';
-            const renderedSrc = proxiedSrc || nextSrc;
-            const isUnoptimized = Boolean(proxiedSrc) || !isOptimizableMarkdownImageSrc(nextSrc);
 
-            // 徽章和按钮图片保留原始点击行为，普通正文图片统一交由灯箱组件管理。
+            // 正文图片统一使用原始地址，避免静态部署依赖 Next 图片优化或运行时代理。
             if (!isBadgeImage && !isVercelButtonSrc(nextSrc)) {
                 return (
                     <MarkdownImageLightbox
-                        src={renderedSrc}
+                        src={nextSrc}
                         alt={imageAlt}
                         className={nextClassName || undefined}
                         width={resolvedWidth}
                         height={resolvedHeight}
-                        title={title}
-                        unoptimized={isUnoptimized}
-                    />
-                );
-            }
-
-            if (proxiedSrc) {
-                return (
-                    <Image
-                        src={proxiedSrc}
-                        alt={imageAlt}
-                        className={nextClassName || undefined}
-                        width={resolvedWidth}
-                        height={resolvedHeight}
-                        loading="lazy"
                         title={title}
                         unoptimized
                     />
@@ -467,11 +446,7 @@ export const BlogPostMarkdown: React.FC<BlogPostMarkdownProps> = ({ content, loc
                 title,
             };
 
-            if (!isOptimizableMarkdownImageSrc(nextSrc)) {
-                return <Image {...imageProps} alt={imageAlt} unoptimized />;
-            }
-
-            return <Image {...imageProps} alt={imageAlt} />;
+            return <Image {...imageProps} alt={imageAlt} unoptimized />;
         },
         code({ inline, className, children, ...props }: { inline?: boolean; node?: unknown; className?: string; children?: React.ReactNode } & React.HTMLAttributes<HTMLElement>) {
             const match = /language-([^\s]+)/i.exec(className || '');
