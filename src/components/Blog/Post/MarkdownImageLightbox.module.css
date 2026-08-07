@@ -1,0 +1,118 @@
+.sharpenImage {
+    filter: contrast(var(--image-sharpen-contrast)) brightness(var(--image-sharpen-brightness));
+    filter: url("#blog-image-sharpen") contrast(var(--image-sharpen-contrast)) brightness(var(--image-sharpen-brightness));
+}
+
+.triggerImage {
+    cursor: zoom-in;
+}
+
+.triggerImage:focus-visible {
+    outline: 2px solid var(--color-accent-solid);
+    outline-offset: 4px;
+}
+
+.viewport {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    padding: clamp(1rem, 3vmin, 2rem);
+    box-sizing: border-box;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background-color: rgba(55, 55, 55, 0.78);
+    touch-action: none;
+}
+
+.previewImage {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: calc(100vw - 2rem);
+    max-width: calc(100dvw - 2rem);
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    cursor: zoom-out;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    will-change: transform;
+    transform-origin: center;
+}
+
+.previewImageZoomed {
+    cursor: grab;
+}
+
+.previewImageDragging {
+    cursor: grabbing;
+}
+
+.closeButton {
+    position: fixed;
+    top: max(0.75rem, env(safe-area-inset-top));
+    right: max(0.75rem, env(safe-area-inset-right));
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    background-color: rgba(32, 32, 32, 0.72);
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+    background-color: rgba(16, 16, 16, 0.9);
+}
+
+.closeButton:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .viewport {
+        padding: 0.75rem;
+    }
+
+    .previewImage {
+        max-width: calc(100vw - 1.5rem);
+        max-width: calc(100dvw - 1.5rem);
+        max-height: calc(100vh - 1.5rem);
+        max-height: calc(100dvh - 1.5rem);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .viewport {
+        animation: lightboxFadeIn 0.16s ease-out;
+    }
+}
+
+@keyframes lightboxFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

@@ -6,6 +6,8 @@ import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import style from '../BlogPost.module.css';
+import ImageSharpenFilter from './ImageSharpenFilter';
+import MarkdownImageLightbox from './MarkdownImageLightbox';
 const LazyCodeBlock = React.lazy(() => import('../CodeBlock'));
 import {
     slugifyHeading,
@@ -423,6 +425,23 @@ export const BlogPostMarkdown: React.FC<BlogPostMarkdownProps> = ({ content, loc
 
             const imageAlt = alt || '';
             const proxiedSrc = shouldProxyMarkdownImageSrc(nextSrc) ? toProxiedMarkdownImageSrc(nextSrc) : '';
+            const renderedSrc = proxiedSrc || nextSrc;
+            const isUnoptimized = Boolean(proxiedSrc) || !isOptimizableMarkdownImageSrc(nextSrc);
+
+            // 徽章和按钮图片保留原始点击行为，普通正文图片统一交由灯箱组件管理。
+            if (!isBadgeImage && !isVercelButtonSrc(nextSrc)) {
+                return (
+                    <MarkdownImageLightbox
+                        src={renderedSrc}
+                        alt={imageAlt}
+                        className={nextClassName || undefined}
+                        width={resolvedWidth}
+                        height={resolvedHeight}
+                        title={title}
+                        unoptimized={isUnoptimized}
+                    />
+                );
+            }
 
             if (proxiedSrc) {
                 return (
@@ -592,13 +611,16 @@ export const BlogPostMarkdown: React.FC<BlogPostMarkdownProps> = ({ content, loc
     };
 
     return (
-        <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            urlTransform={transformMarkdownUrl}
-            components={components}
-        >
-            {transformTabsSyntax(content)}
-        </ReactMarkdown>
+        <>
+            <ImageSharpenFilter />
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                urlTransform={transformMarkdownUrl}
+                components={components}
+            >
+                {transformTabsSyntax(content)}
+            </ReactMarkdown>
+        </>
     );
 };
