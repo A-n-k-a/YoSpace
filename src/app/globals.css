@@ -41,6 +41,13 @@
     --color-common-accent-stroke: hsla(0, 40%, 60%, 0.3);
     --color-common-title: hsl(5, 51%, 67%);
 
+    /* 主页面与局部滚动容器共用同一套滑块配色 */
+    --scrollbar-size: 10px;
+    /* 轨道保持透明，直接呈现当前明暗主题背景，避免根滚动条残留亮色底。 */
+    --scrollbar-track: transparent;
+    --scrollbar-thumb: var(--color-theme-main);
+    --scrollbar-thumb-hover: var(--color-theme-main-600);
+
     /* 字体变量 */
     --font-family-main: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", sans-serif;
     --font-family-mono: "Roboto Mono", "Courier New", "Courier", monospace;
@@ -120,6 +127,46 @@ body {
     padding: 0;
     overflow-x: hidden;
     scrollbar-gutter: stable;
+}
+
+:root,
+.themed-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+:root::-webkit-scrollbar,
+.themed-scrollbar::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+}
+
+:root::-webkit-scrollbar-track,
+.themed-scrollbar::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+}
+
+:root::-webkit-scrollbar-thumb,
+.themed-scrollbar::-webkit-scrollbar-thumb {
+    min-height: 40px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-color: var(--scrollbar-thumb);
+    background-clip: content-box;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    :root::-webkit-scrollbar-thumb:hover,
+    .themed-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: var(--scrollbar-thumb-hover);
+    }
+}
+
+@media (forced-colors: active) {
+    :root,
+    .themed-scrollbar {
+        scrollbar-color: auto;
+    }
 }
 
 * {

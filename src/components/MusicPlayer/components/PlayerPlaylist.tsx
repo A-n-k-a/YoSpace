@@ -59,7 +59,7 @@ const PlayerPlaylist: React.FC<PlayerPlaylistProps> = ({
           initial={{ height: 0 }}
           animate={{ height: 250 }}
           exit={{ height: 0 }}
-          className={styles.playlist}
+          className={`${styles.playlist} themed-scrollbar`}
         >
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="playlist">

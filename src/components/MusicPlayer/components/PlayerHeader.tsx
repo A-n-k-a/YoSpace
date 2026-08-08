@@ -20,6 +20,8 @@ interface PlayerHeaderProps {
  * 2. 提供关闭播放器面板的按钮
  */
 const PlayerHeader: React.FC<PlayerHeaderProps> = ({ currentTrack, onClose }) => {
+  const coverUrl = currentTrack ? getCover(currentTrack) : '';
+
   const blurOnPointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
     event.currentTarget.blur();
   };
@@ -38,13 +40,14 @@ const PlayerHeader: React.FC<PlayerHeaderProps> = ({ currentTrack, onClose }) =>
       <div className={styles.trackInfo}>
         {/* 封面图占位或实际图片 */}
         <div className={styles.cover}>
-          {currentTrack && getCover(currentTrack) ? (
+          {coverUrl ? (
             <Image 
-              src={getCover(currentTrack)} 
+              src={coverUrl}
               alt="Cover" 
               className={styles.coverImg}
               width={40}
               height={40}
+              unoptimized
             />
           ) : (
             <FiMusic size={24} />
