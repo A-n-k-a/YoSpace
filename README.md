@@ -30,27 +30,18 @@
 
 ### 界面预览
 
-首页（桌面端）：
+| 栏目 | 亮色 | 暗色 |
+|-----|------|-----|
+| 首页  | ![light_hone-view.jpeg](images/light_hone-view.jpeg) | ![dark_home-view.jpeg](images/dark_home-view.jpeg) |
+| 博客列表 | ![light_bloglist.jpeg](images/light_bloglist.jpeg) | ![dark_bloglist.jpeg](images/dark_bloglist.jpeg) |
+| Tags | ![light_tags.jpeg](images/light_tags.jpeg) | ![dark_tags.jpeg](images/dark_tags.jpeg) | 
+| Categories | ![light_categories.jpeg](images/light_categories.jpeg) | ![dark_categories.jpeg](images/dark_categories.jpeg) |
+| Links | ![light_links.jpeg](images/light_links.jpeg) | ![dark_links.jpeg](images/dark_links.jpeg) |
+| Subscribe | ![light_subscribe.jpeg](images/light_subscribe.jpeg) | ![dark_subscribe.jpeg](images/dark_subscribe.jpeg) |
+| 播放器 | ![light_playerview.jpeg](images/light_playerview.jpeg) | ![dark_playerview.jpeg](images/dark_playerview.jpeg) |
+| 播放器列表 | ![light_playerlist.jpeg](images/light_playerlist.jpeg) | ![dark_playerlist.jpeg](images/dark_playerlist.jpeg) |
+| Blog_Post | ![light_blog-demo1.jpeg](images/light_blog-demo1.jpeg) | ![dark_blog-demo1.png](images/dark_blog-demo1.png) |
 
-![YoSpace 首页（桌面端）](./images/home-view.png)
-
-首页（移动端）：
-
-![YoSpace 首页（移动端）](./images/phone-home.png)
-
-博客列表（中文）：
-
-![博客列表（中文）](./images/blog-view_zh.png)
-
-博客列表（英文）：
-
-![Blog list (English)](./images/blog-view_en.png)
-
-友链与音乐播放器：
-
-![友链页面](./images/links-view.png)
-
-![全站音乐播放器](./images/musicplayer.png)
 
 ## 技术栈
 
@@ -295,3 +286,15 @@ public/               静态资源
 
 - 确认 `src/content/posts/` 下存在对应语言的文章文件。
 - 中文文件名需为 `*.zh-CN.md`，英文为 `*.md`。
+
+## 版本更新
+
+> 过去的版本更新未做 Tag 归档固化，以最新 [2026/08/08 8f7f5f9d](https://github.com/WavesMan/YoSpace/commit/8f7f5f9d6dd9bbfd85b70f638fe12fb2dba879c0) 发布为最新最初发布版本 v1.0.0
+ 
+#### v1.0.0 2026/08/08
+
+- 实现 Markdown 图片灯箱预览组件，支持缩放、拖拽、双击切换等功能
+- 添加 SVG 锐化滤镜，提升正文图片清晰度
+- 正文图片统一使用原始地址，避免依赖 Next 图片优化或运行时代理
+- 播放器唱片封面统一使用原始地址，避免依赖 Next 图片优化或运行时代理
+- 添加全局滚动条样式变量和主题化滚动条类
