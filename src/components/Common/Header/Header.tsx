@@ -6,35 +6,65 @@ import { usePathname } from "next/navigation";
 import { AiFillSun, AiFillMoon, AiFillHome } from "react-icons/ai";
 import { FaLink, FaBook, FaBars, FaTags, FaFolderOpen, FaArchive, FaRss } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
-import { MdTranslate } from "react-icons/md";
+import { MdOutlineDesktopWindows, MdTranslate } from "react-icons/md";
 import { profile } from "../../../profile";
 import style from "./Header.module.css";
 import { useI18n } from "@/context/I18nContext";
 
 type Theme = 'light' | 'dark';
+type ThemePreference = Theme | 'system';
 
-const DEFAULT_THEME: Theme = 'light';
-let themeSnapshot: Theme = DEFAULT_THEME;
+const DEFAULT_PREFERENCE: ThemePreference = 'system';
+
+interface ThemeState {
+  preference: ThemePreference;
+  resolved: Theme;
+}
+
+let themeState: ThemeState = { preference: DEFAULT_PREFERENCE, resolved: 'light' };
 const themeListeners = new Set<() => void>();
+let mediaQuery: MediaQueryList | null = null;
 
-const readPreferredTheme = (): Theme => {
-  if (typeof window === 'undefined') return DEFAULT_THEME;
+const resolveTheme = (preference: ThemePreference): Theme => {
+  if (preference !== 'system') return preference;
+  if (typeof window === 'undefined') return 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+const readPreferredTheme = (): ThemePreference => {
+  if (typeof window === 'undefined') return DEFAULT_PREFERENCE;
   const saved = window.localStorage.getItem('theme');
   if (saved === 'light' || saved === 'dark') return saved;
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return prefersDark ? 'dark' : 'light';
+  return 'system';
 };
 
 const emitThemeChange = () => {
   themeListeners.forEach((listener) => listener());
 };
 
-const setThemeSnapshot = (nextTheme: Theme) => {
-  if (themeSnapshot === nextTheme) return;
-  themeSnapshot = nextTheme;
+const syncResolvedTheme = () => {
+  const resolved = resolveTheme(themeState.preference);
+  if (themeState.resolved === resolved) return;
+  themeState = { ...themeState, resolved };
+  emitThemeChange();
+};
+
+const onSystemThemeChange = () => {
+  if (themeState.preference === 'system') {
+    syncResolvedTheme();
+  }
+};
+
+const setThemePreference = (nextPreference: ThemePreference) => {
+  if (themeState.preference === nextPreference) return;
+  themeState = { preference: nextPreference, resolved: resolveTheme(nextPreference) };
 
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem('theme', nextTheme);
+    if (nextPreference === 'system') {
+      window.localStorage.removeItem('theme');
+    } else {
+      window.localStorage.setItem('theme', nextPreference);
+    }
   }
 
   emitThemeChange();
@@ -42,25 +72,32 @@ const setThemeSnapshot = (nextTheme: Theme) => {
 
 const onThemeStorage = (event: StorageEvent) => {
   if (event.key !== 'theme') return;
-  setThemeSnapshot(readPreferredTheme());
+  const preference = readPreferredTheme();
+  themeState = { preference, resolved: resolveTheme(preference) };
+  emitThemeChange();
 };
 
 const subscribeTheme = (listener: () => void) => {
   themeListeners.add(listener);
   if (themeListeners.size === 1 && typeof window !== 'undefined') {
     window.addEventListener('storage', onThemeStorage);
+    mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', onSystemThemeChange);
   }
 
   return () => {
     themeListeners.delete(listener);
     if (themeListeners.size === 0 && typeof window !== 'undefined') {
       window.removeEventListener('storage', onThemeStorage);
+      mediaQuery?.removeEventListener('change', onSystemThemeChange);
+      mediaQuery = null;
     }
   };
 };
 
-const getThemeSnapshot = () => themeSnapshot;
-const getThemeServerSnapshot = () => DEFAULT_THEME;
+const getThemeStateSnapshot = () => themeState;
+const SERVER_THEME_STATE: ThemeState = { preference: DEFAULT_PREFERENCE, resolved: 'light' };
+const getThemeStateServerSnapshot = () => SERVER_THEME_STATE;
 
 /**
  * 顶部导航栏组件
@@ -78,7 +115,9 @@ const Header: React.FC = () => {
   const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL;
   const isI18nEnabled = process.env.NEXT_PUBLIC_I18N !== 'false';
 
-  const theme = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getThemeServerSnapshot);
+  const currentThemeState = useSyncExternalStore(subscribeTheme, getThemeStateSnapshot, getThemeStateServerSnapshot);
+  const themePreference = currentThemeState.preference;
+  const theme = currentThemeState.resolved;
   const [isMenuOpenState, setIsMenuOpenState] = useState<{ isOpen: boolean; path: string }>(() => {
     return { isOpen: false, path: pathname || '' };
   });
@@ -86,17 +125,17 @@ const Header: React.FC = () => {
   const isMenuOpen = isMenuOpenState.isOpen && isMenuOpenState.path === (pathname || '');
 
   useEffect(() => {
-    setThemeSnapshot(readPreferredTheme());
+    const preference = readPreferredTheme();
+    const resolved = resolveTheme(preference);
+    if (themeState.preference === preference && themeState.resolved === resolved) return;
+    themeState = { preference, resolved };
+    emitThemeChange();
   }, []);
 
   // 监听主题变化并应用到 body
   useEffect(() => {
     document.body.className = theme;
     document.body.setAttribute('data-theme', theme);
-    
-    if (themeToggle.current) {
-      themeToggle.current.setAttribute('aria-label', theme === 'light' ? '切换到暗色模式' : '切换到亮色模式');
-    }
   }, [theme]);
 
   // 滚动状态管理
@@ -113,11 +152,11 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  const themeToggle = useRef<HTMLButtonElement | null>(null);
+  const themeGroupRef = useRef<HTMLDivElement | null>(null);
   
   // 切换主题处理函数
-  const handleThemeToggle = () => {
-    setThemeSnapshot(theme === 'light' ? 'dark' : 'light');
+  const handleThemeToggle = (preference: ThemePreference) => {
+    setThemePreference(preference);
   };
 
   // 切换语言处理函数
@@ -146,8 +185,8 @@ const Header: React.FC = () => {
   };
 
   // 移动端切换主题
-  const handleMobileThemeToggle = () => {
-    handleThemeToggle();
+  const handleMobileThemeToggle = (preference: ThemePreference) => {
+    handleThemeToggle(preference);
     closeMenu();
   };
 
@@ -207,14 +246,43 @@ const Header: React.FC = () => {
               <MdTranslate />
             </button>
           )}
-          <button 
-            className={`${style.nav_item} ${style.nav_toggle}`} 
-            ref={themeToggle} 
-            onClick={handleThemeToggle}
-            type="button"
+          <div
+            className={style.theme_group}
+            ref={themeGroupRef}
+            role="group"
+            aria-label={t('Theme.Label')}
           >
-            {theme === 'light' ? <AiFillMoon /> : <AiFillSun />}
-          </button>
+            <button
+              className={`${style.nav_item} ${style.nav_toggle} ${themePreference === 'light' ? style.nav_toggle_active : ''}`}
+              onClick={() => handleThemeToggle('light')}
+              type="button"
+              aria-pressed={themePreference === 'light'}
+              title={t('Theme.Light')}
+              aria-label={t('Theme.Light')}
+            >
+              <AiFillSun />
+            </button>
+            <button
+              className={`${style.nav_item} ${style.nav_toggle} ${themePreference === 'system' ? style.nav_toggle_active : ''}`}
+              onClick={() => handleThemeToggle('system')}
+              type="button"
+              aria-pressed={themePreference === 'system'}
+              title={t('Theme.System')}
+              aria-label={t('Theme.System')}
+            >
+              <MdOutlineDesktopWindows />
+            </button>
+            <button
+              className={`${style.nav_item} ${style.nav_toggle} ${themePreference === 'dark' ? style.nav_toggle_active : ''}`}
+              onClick={() => handleThemeToggle('dark')}
+              type="button"
+              aria-pressed={themePreference === 'dark'}
+              title={t('Theme.Dark')}
+              aria-label={t('Theme.Dark')}
+            >
+              <AiFillMoon />
+            </button>
+          </div>
         </div>
 
         <button 
@@ -305,13 +373,38 @@ const Header: React.FC = () => {
                             <MdTranslate /> {locale === 'zh-CN' ? 'English' : '中文'}
                         </button>
                     )}
-                    <button 
-                        className={style.mobile_control_btn} 
-                        onClick={handleMobileThemeToggle}
-                        type="button"
-                    >
-                        {theme === 'light' ? <><AiFillMoon /> 暗色模式</> : <><AiFillSun /> 亮色模式</>}
-                    </button>
+                    <div className={style.mobile_theme_group} role="group" aria-label={t('Theme.Label')}>
+                        <button
+                            className={`${style.mobile_theme_btn} ${themePreference === 'light' ? style.mobile_theme_btn_active : ''}`}
+                            onClick={() => handleMobileThemeToggle('light')}
+                            type="button"
+                            aria-pressed={themePreference === 'light'}
+                            aria-label={t('Theme.Light')}
+                        >
+                            <AiFillSun />
+                            {themePreference === 'light' && <span>{t('Theme.Light')}</span>}
+                        </button>
+                        <button
+                            className={`${style.mobile_theme_btn} ${themePreference === 'system' ? style.mobile_theme_btn_active : ''}`}
+                            onClick={() => handleMobileThemeToggle('system')}
+                            type="button"
+                            aria-pressed={themePreference === 'system'}
+                            aria-label={t('Theme.System')}
+                        >
+                            <MdOutlineDesktopWindows />
+                            {themePreference === 'system' && <span>{t('Theme.System')}</span>}
+                        </button>
+                        <button
+                            className={`${style.mobile_theme_btn} ${themePreference === 'dark' ? style.mobile_theme_btn_active : ''}`}
+                            onClick={() => handleMobileThemeToggle('dark')}
+                            type="button"
+                            aria-pressed={themePreference === 'dark'}
+                            aria-label={t('Theme.Dark')}
+                        >
+                            <AiFillMoon />
+                            {themePreference === 'dark' && <span>{t('Theme.Dark')}</span>}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

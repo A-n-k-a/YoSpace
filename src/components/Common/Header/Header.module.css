@@ -97,6 +97,19 @@ nav.scrolled {
     cursor: pointer;
 }
 
+.theme_group {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1vw, 16px);
+    padding: 4px 10px;
+    border: 1px solid var(--color-accent-stroke);
+    border-radius: 20px;
+}
+
+.nav_toggle_active {
+    color: var(--color-accent-hover);
+}
+
 .nav_item:active,
 .nav_toggle:active,
 .nav_title:active,
@@ -173,15 +186,21 @@ nav.scrolled {
 
 .mobile_controls {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin-top: 2rem;
+    padding: 0 1rem;
 }
 
 .mobile_control_btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
+    height: 40px;
+    padding: 0 20px;
+    box-sizing: border-box;
     border: 1px solid var(--color-text-secondary);
     border-radius: 20px;
     background: transparent;
@@ -192,14 +211,48 @@ nav.scrolled {
     -webkit-tap-highlight-color: transparent;
 }
 
+.mobile_theme_group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 40px;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-text-secondary);
+    border-radius: 999px;
+}
+
+.mobile_theme_btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    padding: 0 12px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile_theme_btn_active {
+    background-color: var(--color-text-primary);
+    color: var(--color-bg);
+}
+
 /* 桌面端 Hover 效果 */
 @media (hover: hover) {
-    .mobile_control_btn:hover {
+    .mobile_control_btn:hover,
+    .mobile_theme_btn:hover {
         background: var(--color-text-primary);
         color: var(--color-bg);
     }
-    
-    .mobile_control_btn:active {
+
+    .mobile_control_btn:active,
+    .mobile_theme_btn:active {
         transform: scale(0.95);
     }
 }
@@ -225,7 +278,8 @@ nav.scrolled {
 
 /* 移动端 Active 效果 */
 @media (hover: none) {
-    .mobile_control_btn:active {
+    .mobile_control_btn:active,
+    .mobile_theme_btn:active {
         animation: mobileTapFeedback 0.4s ease-out;
     }
 }

@@ -25,7 +25,7 @@ A personal homepage project built with Next.js App Router. It includes a profile
 - Blog: post list and post detail, with Markdown support
 - Links: link cards
 - Music Player: global floating player with playlist, drag-and-drop reorder, progress/volume dragging, and play mode switching
-- Theme: light/dark mode
+- Theme: light/dark/system modes; system mode reacts live to OS color-scheme changes
 - i18n: Chinese/English switch (controlled by env var)
 
 ## Tech Stack

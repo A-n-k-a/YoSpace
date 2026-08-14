@@ -97,5 +97,11 @@
             "Atom": "Add Atom link to supported readers",
             "Browser": "Some browsers support direct subscription"
         }
+    },
+    "Theme": {
+        "Label": "Theme",
+        "Light": "Light",
+        "Dark": "Dark",
+        "System": "System"
     }
 }

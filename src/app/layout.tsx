@@ -9,13 +9,15 @@ const themeInitScript = `
   (() => {
     try {
       const saved = window.localStorage.getItem('theme');
-      const hasSaved = saved === 'light' || saved === 'dark';
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = hasSaved ? saved : prefersDark ? 'dark' : 'light';
-
-      if (!hasSaved) {
-        window.localStorage.setItem('theme', theme);
+      const explicit = saved === 'light' || saved === 'dark';
+      if (saved && !explicit) {
+        window.localStorage.removeItem('theme');
       }
+      const theme = explicit
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
 
       document.body.className = theme;
       document.body.setAttribute('data-theme', theme);
