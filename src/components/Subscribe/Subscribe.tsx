@@ -133,7 +133,7 @@ const Subscribe: React.FC = () => {
           </div>
         </div>
       </div>
-      <Background text="SUBSCRIBE" />
+      <Background text={t("Background.Subscribe")} />
     </>
   );
 };

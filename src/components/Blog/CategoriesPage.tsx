@@ -143,7 +143,7 @@ const CategoriesPage: React.FC = () => {
                     )}
                 </div>
             </div>
-            <Background text={t("Categories.Title")} />
+            <Background text={t("Background.Categories")} />
         </>
     );
 };

@@ -574,7 +574,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ initialContent, initialLocale }) =>
                     )}
                 </div>
             )}
-            <Background text="BLOG" />
+            <Background text={t("Background.Blog")} />
         </div>
     );
 };

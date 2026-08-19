@@ -117,7 +117,7 @@ const SearchPage: React.FC = () => {
                     )}
                 </div>
             </div>
-            <Background text="BLOG" />
+            <Background text={t("Background.Blog")} />
         </>
     );
 };

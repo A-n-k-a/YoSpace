@@ -225,7 +225,7 @@ const Archive: React.FC = () => {
                     )}
                 </div>
             </div>
-            <Background text="ARCHIVE" />
+            <Background text={t("Background.Archive")} />
         </>
     );
 };

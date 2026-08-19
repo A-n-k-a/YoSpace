@@ -447,7 +447,7 @@ const Blog: React.FC<BlogProps> = ({ initialPosts, initialTotal, initialLocale }
                     <Pagination totalItems={totalItems} itemsLimitPerPage={itemsLimit} visiblePages={5} currentPage={currentPage} handlePageChange={handlePageChange} />
                 </div>
             </div>
-            <Background text="BLOG" />
+            <Background text={t("Background.Blog")} />
         </>
     );
 };

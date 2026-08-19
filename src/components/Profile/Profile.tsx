@@ -104,7 +104,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            <p className={style.profile_background}>{`<PROFILE/>`}</p>
+            <p className={style.profile_background}>{`<${t("Background.Profile")}/>`}</p>
         </>
     )
 }

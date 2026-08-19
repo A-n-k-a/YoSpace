@@ -1,12 +1,12 @@
 {
     "Pages": {
-        "Home": "Home",
-        "Blog": "Blog",
-        "State": "State",
-        "Links": "Links",
-        "Tags": "Tags",
-        "Categories": "Categories",
-        "Subscribe": "Subscribe"
+        "Home": "首页",
+        "Blog": "博客",
+        "State": "状态",
+        "Links": "友链",
+        "Tags": "标签",
+        "Categories": "分类",
+        "Subscribe": "订阅"
     },
     "Profile": {
         "ClickToSwitch": "试试点击我！"
@@ -109,14 +109,14 @@
         }
     },
     "Archive": {
-        "Title": "Archive"
+        "Title": "归档"
     },
     "Tags": {
-        "Title": "Tags",
+        "Title": "标签",
         "PostsSuffix": "篇文章"
     },
     "Categories": {
-        "Title": "Categories",
+        "Title": "分类",
         "PostsSuffix": "篇文章"
     },
     "Search": {
@@ -149,5 +149,15 @@
         "Light": "亮色",
         "Dark": "暗色",
         "System": "跟随系统"
+    },
+    "Background": {
+        "Profile": "档案",
+        "Navigation": "导航",
+        "Blog": "博客",
+        "Archive": "归档",
+        "Links": "友链",
+        "Subscribe": "订阅",
+        "Tags": "标签",
+        "Categories": "分类"
     }
 }

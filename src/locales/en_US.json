@@ -103,5 +103,15 @@
         "Light": "Light",
         "Dark": "Dark",
         "System": "System"
+    },
+    "Background": {
+        "Profile": "PROFILE",
+        "Navigation": "NAVIGATION",
+        "Blog": "BLOG",
+        "Archive": "ARCHIVE",
+        "Links": "LINKS",
+        "Subscribe": "SUBSCRIBE",
+        "Tags": "TAGS",
+        "Categories": "CATEGORIES"
     }
 }

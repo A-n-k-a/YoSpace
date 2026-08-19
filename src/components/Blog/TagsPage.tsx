@@ -119,7 +119,7 @@ const TagsPage: React.FC = () => {
                     )}
                 </div>
             </div>
-            <Background text={t("Tags.Title")} />
+            <Background text={t("Background.Tags")} />
         </>
     );
 };

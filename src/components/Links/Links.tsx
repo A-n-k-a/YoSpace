@@ -37,7 +37,7 @@ const Links = () => {
                     </div>
                 </div>
             </div>
-            <Background text="LINKS" />
+            <Background text={t("Background.Links")} />
         </>
     )
 }

@@ -456,7 +456,7 @@ export default function Home() {
                                     </div>
                                 )}
                             </div>
-                            <p className={profileStyles.profile_background}>{`<NAVIGATION/>`}</p>
+                            <p className={profileStyles.profile_background}>{`<${t("Background.Navigation")}/>`}</p>
                         </div>
                     )}
                 </div>
