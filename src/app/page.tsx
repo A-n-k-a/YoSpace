@@ -333,17 +333,21 @@ export default function Home() {
                     />
 
                     {activePageId === "profile" && (
-                        <div className={`${styles.home_page} ${styles.home_page_profile} ${styles.home_page_animate}`} key="profile">
-                            <Profile />
-                            <div className={styles.home_page_hint}>
-                                <span className={styles.home_page_hint_arrow}>{">>"}</span>
+                        <div className={`${styles.home_page} ${styles.home_page_profile}`} key="profile">
+                            <div className={styles.home_page_animate}>
+                                <Profile />
+                                <div className={styles.home_page_hint}>
+                                    <span className={styles.home_page_hint_arrow}>{">>"}</span>
+                                </div>
                             </div>
+                            <p className={profileStyles.profile_background}>{`<${t("Background.Profile")}/>`}</p>
                         </div>
                     )}
 
                     {activePageId === "search" && (
-                        <div className={`${styles.home_page} ${styles.home_page_animate}`} key="search">
-                            <div className={styles.home_search_section}>
+                        <div className={styles.home_page} key="search">
+                            <div className={styles.home_page_animate}>
+                                <div className={styles.home_search_section}>
                                 <h1 className={`${styles.home_title} ${styles.home_search_title_animated}`}>{t("Search.Title")}</h1>
                                 <form className={`${styles.home_search_bar} ${styles.home_search_bar_animated}`} aria-label={t("Search.InputLabel")} onSubmit={handleSearchSubmit}>
                                     <div className={styles.home_search_engine_group} role="radiogroup" aria-label={t("Search.Engine.Label")}>
@@ -455,6 +459,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 )}
+                                </div>
                             </div>
                             <p className={profileStyles.profile_background}>{`<${t("Background.Navigation")}/>`}</p>
                         </div>
